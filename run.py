@@ -1,5 +1,5 @@
 import os
-from flask import Flask # Here we are importing Flask class 
+from flask import Flask, render_template # Here we are importing Flask class 
 
 app = Flask(__name__) #We are than creating instance of this and storing it in a variable called app 
                       #( First argument of flask call is the name of the applications module), Since we are just using a single module we can use __name__ which is a built in python variable, 
@@ -8,7 +8,11 @@ app = Flask(__name__) #We are than creating instance of this and storing it in a
 
 @app.route("/") #We are than using app.route decorator, In python a decorator starts with @ symbol , Effectively a decorator is a way of wrapping functions.
 def index():
-    return "Hello, World"
+    return render_template("index.html")
+
+@app.route('/about')
+def about():
+    return render_template("about.html")
 
 if __name__ == "__main__":
     app.run(
