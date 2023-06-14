@@ -10,9 +10,22 @@ app = Flask(__name__) #We are than creating instance of this and storing it in a
 def index():
     return render_template("index.html")
 
+# make sure there are two empty lines between functions to keep code pep8 compiant
 @app.route('/about')
 def about():
     return render_template("about.html")
+
+
+@app.route('/contact')
+def contact():
+    return render_template("contact.html")
+
+
+@app.route('/careers')
+def careers():
+    return render_template("careers.html")
+
+
 
 if __name__ == "__main__":
     app.run(
