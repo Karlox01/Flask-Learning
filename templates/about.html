@@ -1,4 +1,99 @@
 {% extends "base.html" %}
 {% block content %}
-    <h2>About Page</h2>
+
+
+<!-- {{ company[1]["name"] }} Now we are only importing company so only 1 lines instaed of the below code  ALSO BECAME REDUNDANT LOL-->
+
+<!-- {% for number in list_of_numbers %} <!-- This iterates over a list we added in t he run.py about line // BTW number is just random you can call it anything-->
+<!-- <p> {{ number }} </p> <!-- Inside for loop id like to generate paragraph tag for each iteration-->
+<!-- {% endfor %} you always need to make sure you close the for loop  THIS IS OLD CODE NO LONGER REQUIRED, WAS USED WHEN WE MANUALLY ITERATED THE FUNCTION-->
+
+
+<h2>{{ page_title }}</h2> <!-- Double curly brackets is an expression that is about tO display something on the page.-->
+<p>
+    Thorin and Company refers to the thirteen exiled Dwarves under the leadership of Thorin Oakenshield and the one
+    Hobbit Bilbo Baggins, who famously made the Quest of Erebor, travelling through the Misty Mountains and the
+    Wilderland to the Lonely Mountain, to recover their ancient treasure from the Kingdom of Erebor, stolen by the
+    Dragon Smaug.
+
+    Thorin's company were:
+
+    Balin and Dwalin, sons of Fundin (descendants of Náin II)
+    Óin and Glóin, sons of Gróin (cousins of Balin and Dwalin)
+    Fíli and Kíli, brothers, nephews of Thorin
+    Dori, Nori and Ori (Dwarves of the House of Durin)
+    Bifur with his cousins Bofur and Bombur (descendants of the Dwarves of Khazad-dûm)[1]
+    And Bilbo Baggins, a Hobbit of the Shire[2]
+    They were joined by Gandalf for part of the journey.
+
+    Thorin referred to himself and his Dwarven companions as "Thorin and Company" in the opening line of the message
+    left on Bilbo's mantelpiece after the unexpected party at Bag End.[3]
+</p>
+
+{% for member in company %} <!-- member used as random to iterate over company data file we set up in run.py-->
+
+<!-- loop.index shows us exactly which iteration of the loop we are on -->
+
+<div class="row featurette"> <!-- This code is now in the looop-->
+
+    {% if loop.index % 2 != 0 %}
+    <!-- If statements go between curly brackets and percentage notation because they are logic-->
+        <div class="col-md-7"> <!-- Occupies 7/12 spaces within bootstrap flexbox-->
+            <h3><a href="/about/{{ member.url }}">{{ loop.index }}. {{ member.name }} </a></h3>
+            <!-- this will reference variable member and grab . name object key from company .json array-->
+            <p>
+                {{ member.description }}
+            </p>
+        </div>
+        <div class="col-md-5">
+            <img src="{{ member.image_source }}" alt="" class="featurette-image image-responsive">
+        </div>
+
+    {% else %} <!-- inside this else statement any loop that is even number will be displayed -->
+
+        <div class="col-md-5">
+            <img src="{{ member.image_source }}" alt="" class="featurette-image image-responsive">
+        </div>
+        <div class="col-md-7"> <!-- Occupies 7/12 spaces within bootstrap flexbox-->
+            <h3><a href="/about/{{ member.url }}">{{ loop.index }}. {{ member.name }} </a></h3>
+            <!-- <h3><a href="/about/{{ member.name|replace(' ', '-')|replace('&', 'and')|replace('Ó', 'O')|lower }}">{{ loop.index }}. {{ member.name }} </a></h3> Here we have used some of the attributes to replace the special letters and how they appear on screen -->
+
+            <!-- this will reference variable member and grab . name object key from company .json array-->
+            <p>
+                {{ member.description }}
+            </p>
+        </div>
+
+
+    {% endif %} <!-- this ends our if loop statement-->
+
+</div>
+
+{% if loop.index != 13 %} <!-- For loop saying dont display horizontal line on the last iteration as it display twice you can also do it like if loop.index != loop.length-->
+
+    <hr class="featurette-divider"> 
+
+{% endif %}
+
+
+{% endfor %}
+
+<!-- <div class="row featurette">
+    <div class="col-md-5">
+        <img src="https://static.wikia.nocookie.net/lotr/images/b/b4/The-Hobbit-Fili-and-Kili.jpg" alt="">
+    </div>
+    <div class="col-md-7">
+        <h3>Fili And Kili</h3>
+        <p>
+            Fíli and Kíli were brothers, the youngest of the thirteen Dwarves who set out with Thorin Oakenshield's
+            company,
+            along with Gandalf and Bilbo Baggins, to reclaim the Lonely Mountain from the dragon Smaug.
+
+            Fíli and Kíli were the two most active Dwarves of Thorin's company, and, apart from Balin and possibly
+            Bombur, they
+            appear more frequently as "individual" characters in J.R.R. Tolkien's The Hobbit than the rest of Thorin's
+            companions, who are most often named only in group-reference.
+        </p>
+    </div>
+</div> -->
 {% endblock %}
