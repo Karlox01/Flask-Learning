@@ -1,6 +1,7 @@
 import os
 import json # here we are importing json , So that we can import data from company.json file
-from flask import Flask, render_template, request, flash  # Here we are importing Flask class request is required for forms to be able to post and handle data, FLASH is used to display a message to the user once the form has been submitted, To use flash messages we need to create a secret key because flash cryptos all messages for security purposes.
+from flask import Flask, render_template, request, flash # Here we are importing Flask class request is required for forms to be able to post and handle data, FLASH is used to display a message to the user once the form has been submitted, To use flash messages we need to create a secret key because flash cryptos all messages for security purposes.
+import requests
 if os.path.exists("env.py"): # This basically means if env.py file exists import it 
     import env
 
@@ -41,10 +42,32 @@ def about_member(member_name):
 @app.route('/contact', methods=["GET", "POST"]) # This is required in order for Flash to process the POST methods
 def contact():
     if request.method == "POST":
-        flash("Thank you {}, We have received your message".format(
-            request.form.get("name")))
-        # print(request.form.get("name")) # Both of these two will work These are now not needed but for learning experience i commented them out
-        # print(request.form["email"])
+        name = request.form.get("name")
+        email = request.form.get("email")
+        message = request.form.get("message")
+
+        service_id = 'service_dth2s0f'
+        template_id = 'template_mrextxh'
+        user_id = 'PB47RKBdtDK687oJU'
+
+        payload = {
+            'service_id': service_id,
+            'template_id': template_id,
+            'user_id': user_id,
+            'template_params': {
+                'name': name,
+                'email': email,
+                'message': message
+            }
+        }
+        response = requests.post('https://api.emailjs.com/api/v1.0/email/send', json=payload)
+        print(response.text)  # Add this line to print the response
+
+
+        if response.status_code == 200:
+            flash("Thank you, we have received your message.")
+        else:
+            flash("Failed to send email. Please try again later.")
 
     return render_template("contact.html", page_title="Contact")
 
