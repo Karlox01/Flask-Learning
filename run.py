@@ -67,9 +67,11 @@ def contact():
                 flash("Thank you, we have received your message.")
             else:
                 flash("Failed to send email. Please try again later.")
+                print("SendGrid API Error:", response.status_code)
 
         except Exception as e:
             flash("An error occurred while sending the email. Please try again later.")
+            print("Exception:", str(e))
 
     return render_template("contact.html", page_title="Contact")
 
