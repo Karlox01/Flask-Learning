@@ -42,8 +42,8 @@ def about_member(member_name):
 @app.route('/contact', methods=["GET", "POST"]) # This is required in order for Flash to process the POST methods
 def contact():
     if request.method == "POST":
-        name = request.form.get("name")
-        email = request.form.get("email")
+        from_name = request.form.get("name")
+        from_email = request.form.get("email")
         message = request.form.get("message")
 
         service_id = 'service_dth2s0f'
@@ -55,8 +55,8 @@ def contact():
             'template_id': template_id,
             'user_id': user_id,
             'template_params': {
-                'name': name,
-                'email': email,
+                'from_name': from_name,
+                'from_email': from_email,
                 'message': message
             }
         }
