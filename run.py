@@ -1,7 +1,8 @@
 import os
 import json # here we are importing json , So that we can import data from company.json file
 from flask import Flask, render_template, request, flash # Here we are importing Flask class request is required for forms to be able to post and handle data, FLASH is used to display a message to the user once the form has been submitted, To use flash messages we need to create a secret key because flash cryptos all messages for security purposes.
-import requests
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 if os.path.exists("env.py"): # This basically means if env.py file exists import it 
     import env
 
@@ -42,32 +43,33 @@ def about_member(member_name):
 @app.route('/contact', methods=["GET", "POST"]) # This is required in order for Flash to process the POST methods
 def contact():
     if request.method == "POST":
-        from_name = request.form.get("name")
-        from_email = request.form.get("email")
+        name = request.form.get("name")
+        email = request.form.get("email")
+        phone = request.form.get("phone")
         message = request.form.get("message")
 
-        service_id = 'service_dth2s0f'
-        template_id = 'template_mrextxh'
-        user_id = 'PB47RKBdtDK687oJU'
+        sendgrid_api_key = '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'
 
-        payload = {
-            'service_id': service_id,
-            'template_id': template_id,
-            'user_id': user_id,
-            'template_params': {
-                'from_name': from_name,
-                'from_email': from_email,
-                'message': message
-            }
-        }
-        response = requests.post('https://api.emailjs.com/api/v1.0/email/send', json=payload)
-        print(response.text)  # Add this line to print the response
+        message = Mail(
+            from_email=email,
+            to_emails='kurlabol@hotmail.com',
+            subject='New message from your Flask app',
+            plain_text_content=f'Name: {name}\nEmail: {email}\n Phone: {phone}\nMessage: {message}'
+        )
+        
 
+        try:
+            # Send the email using the SendGrid API
+            sg = SendGridAPIClient(os.environ.get("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"))
+            response = sg.send(message)
 
-        if response.status_code == 200:
-            flash("Thank you, we have received your message.")
-        else:
-            flash("Failed to send email. Please try again later.")
+            if response.status_code == 202:
+                flash("Thank you, we have received your message.")
+            else:
+                flash("Failed to send email. Please try again later.")
+
+        except Exception as e:
+            flash("An error occurred while sending the email. Please try again later.")
 
     return render_template("contact.html", page_title="Contact")
 
