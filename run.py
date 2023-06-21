@@ -48,7 +48,7 @@ def contact():
         phone = request.form.get("phone")
         message = request.form.get("message")
 
-        sendgrid_api_key = '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'
+        sendgrid_api_key = ''
 
         message = Mail(
             from_email=email,
@@ -60,7 +60,7 @@ def contact():
 
         try:
             # Send the email using the SendGrid API
-            sg = SendGridAPIClient(os.environ.get("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"))
+            sg = SendGridAPIClient('')
             response = sg.send(message)
 
             if response.status_code == 202:
